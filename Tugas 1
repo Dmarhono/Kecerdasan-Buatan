@@ -1,1 +1,52 @@
-Rute Rumania menggunakan DFS
+peta = {
+    'arad': ['zerind', 'timisoara', 'sibiu'],
+    'zerind': ['arad', 'oradea'],
+    'oradea': ['zerind', 'sibiu'],
+    'timisoara': ['arad', 'lugoj'],
+    'lugoj': ['timisoara', 'mehadia'],
+    'mehadia': ['lugoj', 'dobreta'],
+    'dobreta': ['mehadia', 'craiova'],
+    'craiova': ['dobreta', 'rimnicu vilcea', 'pitesti'],
+    'sibiu': ['arad', 'oradea', 'rimnicu vilcea', 'fagaras'],
+    'rimnicu vilcea': ['sibiu', 'craiova', 'pitesti'],
+    'fagaras': ['sibiu', 'bucharest'],
+    'pitesti': ['rimnicu vilcea', 'craiova', 'bucharest'],
+    'bucharest': ['fagaras', 'pitesti', 'giurgiu', 'urziceni'],
+    'giurgiu': ['bucharest'],
+    'urziceni': ['bucharest', 'hirsova', 'vaslui'],
+    'hirsova': ['urziceni', 'eforie'],
+    'eforie': ['hirsova'],
+    'vaslui': ['urziceni', 'iasi'],
+    'iasi': ['vaslui', 'neamt'],
+    'neamt': ['iasi']
+}
+
+def dfs(awal, tujuan):
+    jalur, dikunjungi = [], set()
+
+    def cari(kota):
+        jalur.append(kota)
+        dikunjungi.add(kota)
+        if kota == tujuan:
+            return True
+        for destinasi in peta.get(kota, []):
+            if destinasi not in dikunjungi and cari(destinasi):
+                return True
+        jalur.pop()
+        return False
+
+    return jalur if cari(awal) else None
+
+def cari_rute():
+    asal = input("Masukkan kota asal: ")
+    tujuan = input("Masukkan kota tujuan: ")
+
+    if asal not in peta or tujuan not in peta:
+        print("Kota tidak ditemukan dalam peta.")
+        return
+
+    jalur = dfs(asal, tujuan)
+    print("Rute dari", asal, "ke", tujuan, ":", " -> ".join(jalur) if jalur else "Tidak ditemukan rute.")
+
+if __name__ == "__main__":
+    cari_rute()
